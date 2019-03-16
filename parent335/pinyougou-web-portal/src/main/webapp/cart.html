@@ -23,12 +23,12 @@
 			<div class="shortcut">
 				<ul class="fl">
 					<li class="f-item">品优购欢迎您！</li>
-					<li class="f-item">请 <a href="login.html">登录</a> <span><a href="#">免费注册</a></span></li>
+					<li class="f-item">请 <a href="login.html">登录</a> <span><a href="register.html">免费注册</a></span></li>
 				</ul>
 				<ul class="fr">
-					<li class="f-item">我的订单</li>
+					<li class="f-item"><a href="home.html">我的订单</a></li>
 					<li class="f-item space"></li>
-					<li class="f-item">我的品优购</li>
+					<li class="f-item"><a href="home.html">我的品优购</a></li>
 					<li class="f-item space"></li>
 					<li class="f-item">品优购会员</li>
 					<li class="f-item space"></li>
@@ -92,7 +92,7 @@
 									<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" ng-model="item.num" />
 									<a href="javascript:void(0)" class="increment plus" ng-click="addGoodsToCartList(item.itemId,1)">+</a>
 								</li>
-								<li class="yui3-u-1-8"><span class="sum">{{item.totalFee.toFixed(2)}}</span></li>
+								<li class="yui3-u-1-8"><span class="sum">{{item.totalFee}}</span></li>
 								<li class="yui3-u-1-8">
 									<a href="#none">删除</a><br />
 									<a href="#none">移到我的关注</a>

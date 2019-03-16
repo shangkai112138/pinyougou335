@@ -41,7 +41,7 @@ app.controller('specificationOptionController' ,function($scope,$controller   ,s
 		}				
 		serviceObject.success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					//重新查询 
 		        	$scope.reloadList();//重新加载
 				}else{
@@ -57,7 +57,7 @@ app.controller('specificationOptionController' ,function($scope,$controller   ,s
 		//获取选中的复选框			
 		specificationOptionService.dele( $scope.selectIds ).success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					$scope.reloadList();//刷新列表
 					$scope.selectIds = [];
 				}						

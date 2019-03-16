@@ -1,5 +1,5 @@
 // 定义控制器:
-app.controller("brandController",function($scope,$controller,brandService){
+app.controller("brandController",function($scope,$controller,$http,brandService){
 	// AngularJS中的继承:伪继承
 	$controller('baseController',{$scope:$scope});
 	
@@ -12,15 +12,24 @@ app.controller("brandController",function($scope,$controller,brandService){
 	}
 
 	// 分页查询
-	$scope.findPage = function(page,rows){
+	$scope.findByPage = function(page,rows){
 		// 向后台发送请求获取数据:
-		brandService.findPage(page,rows).success(function(response){
+		brandService.findByPage(page,rows).success(function(response){
 			$scope.paginationConf.totalItems = response.total;
 			$scope.list = response.rows;
 		});
 	}
-	
-	// 保存品牌的方法:
+
+	//导入Excel
+    $scope.uploadExcel=function(){
+        brandService.uploadExcel().success(
+            function(response){
+                alert(response.message);
+            }
+        );
+    }
+
+    // 保存品牌的方法:
 	$scope.save = function(){
 		// 区分是保存还是修改
 		var object;
@@ -29,12 +38,12 @@ app.controller("brandController",function($scope,$controller,brandService){
 			object = brandService.update($scope.entity);
 		}else{
 			// 保存
-			object = brandService.add($scope.entity);
+			object = brandService.save($scope.entity);
 		}
 		object.success(function(response){
-			// {flag:true,message:xxx}
+			// {success:true,message:xxx}
 			// 判断保存是否成功:
-			if(response.flag){
+			if(response.success==true){
 				// 保存成功
 				alert(response.message);
 				$scope.reloadList();
@@ -47,7 +56,7 @@ app.controller("brandController",function($scope,$controller,brandService){
 	
 	// 查询一个:
 	$scope.findById = function(id){
-		brandService.findOne(id).success(function(response){
+		brandService.findById(id).success(function(response){
 			// {id:xx,name:yy,firstChar:zz}
 			$scope.entity = response;
 		});
@@ -57,7 +66,7 @@ app.controller("brandController",function($scope,$controller,brandService){
 	$scope.dele = function(){
 		brandService.dele($scope.selectIds).success(function(response){
 			// 判断保存是否成功:
-			if(response.flag==true){
+			if(response.success==true){
 				// 保存成功
 				// alert(response.message);
 				$scope.reloadList();
@@ -79,5 +88,20 @@ app.controller("brandController",function($scope,$controller,brandService){
 			$scope.list = response.rows;
 		});
 	}
+
+    // 显示状态
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        brandService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+            }else{
+                alert(response.message);
+            }
+        });
+    }
 	
 });
