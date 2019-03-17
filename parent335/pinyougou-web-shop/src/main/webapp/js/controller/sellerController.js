@@ -41,7 +41,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 		}				
 		serviceObject.success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					//重新查询 
 		        	$scope.reloadList();//重新加载
 				}else{
@@ -54,7 +54,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	$scope.add = function(){
 		sellerService.add( $scope.entity  ).success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					// 重新查询 
 		        	// $scope.reloadList();//重新加载
 					location.href="shoplogin.html";
@@ -71,7 +71,7 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 		//获取选中的复选框			
 		sellerService.dele( $scope.selectIds ).success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					$scope.reloadList();//刷新列表
 					$scope.selectIds = [];
 				}						

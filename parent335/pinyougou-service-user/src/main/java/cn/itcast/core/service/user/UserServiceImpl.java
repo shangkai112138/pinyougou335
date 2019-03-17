@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService{
             String password = MD5Util.MD5Encode(user.getPassword(), null);
             user.setPassword(password);
             user.setCreated(new Date());
+            user.setStatus("0");
             user.setUpdated(new Date());
             userDao.insertSelective(user);
         }else{

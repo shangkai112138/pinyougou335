@@ -36,8 +36,17 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 			}
 		);				
 	}
-	
-	//保存 
+
+    //导入为excel表
+    $scope.uploadExcel=function(){
+        typeTemplateService.uploadExcel().success(
+            function(response){
+                alert(response.message);
+            }
+        );
+    }
+
+    //保存
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
 		if($scope.entity.id!=null){//如果有ID
@@ -47,7 +56,7 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 		}				
 		serviceObject.success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					//重新查询 
 		        	$scope.reloadList();//重新加载
 				}else{
@@ -63,7 +72,7 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 		//获取选中的复选框			
 		typeTemplateService.dele( $scope.selectIds ).success(
 			function(response){
-				if(response.flag){
+				if(response.success){
 					$scope.reloadList();//刷新列表
 					$scope.selectIds = [];
 				}						
@@ -82,7 +91,24 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 			}			
 		);
 	}
-    
+
+    // 显示状态
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        typeTemplateService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+
+
+    //$scope.brandList={data:[{id:1,text:'联想'},{id:2,text:'华为'},{id:3,text:'小米'}]};//品牌列表
 	$scope.brandList={data:[]}
 	// 查询关联的品牌信息:
 	$scope.findBrandList = function(){
@@ -92,7 +118,7 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	}
 	
 	$scope.specList={data:[]}
-	// 查询关联的规格信息:
+	// 查询关联的品牌信息:
 	$scope.findSpecList = function(){
 		specificationService.selectOptionList().success(function(response){
 			$scope.specList = {data:response};
