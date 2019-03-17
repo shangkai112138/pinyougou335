@@ -1,6 +1,7 @@
 package cn.itcast.core.service.content;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.ad.Content;
@@ -26,4 +27,9 @@ public interface ContentService {
 	 */
 	public List<Content> findByCategoryId(Long categoryId);
 
+	/**
+	 * 首页所有广告查询
+	 * @return
+	 */
+	Map<Object,Object> findContent();
 }

@@ -28,4 +28,11 @@ public interface ContentDao {
     int updateByPrimaryKeySelective(Content record);
 
     int updateByPrimaryKey(Content record);
+
+    /**
+     * 根据CategoryId查出所有商品的分类
+     * @param ids
+     * @return
+     */
+    List<Content> findByCategoryId(long ids);
 }

@@ -1,9 +1,12 @@
 package cn.itcast.core.service.content;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.itcast.core.entity.PageResult;
+import cn.itcast.core.pojo.ad.ContentCategory;
 import cn.itcast.core.pojo.ad.ContentQuery;
+import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -12,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 
 import cn.itcast.core.dao.ad.ContentDao;
 import cn.itcast.core.pojo.ad.Content;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -19,11 +23,18 @@ import javax.annotation.Resource;
 @Service
 public class ContentServiceImpl implements ContentService {
 
+    private Object object;
+
 	@Resource
 	private ContentDao contentDao;
 
 	@Resource
 	private RedisTemplate<String, Object> redisTemplate;
+
+
+	@Reference
+	private ContentCategoryService contentCategoryService;
+
 
 	@Override
 	public List<Content> findAll() {
@@ -115,6 +126,41 @@ public class ContentServiceImpl implements ContentService {
         }
         return list;
     }
+
+    /**
+     * 首页所有广告查询
+     * @return
+     */
+	@Override
+	public Map<Object, Object> findContent() {
+		// 判断缓存中是否有广告
+        Map<Object, Object> contents = redisTemplate.boundHashOps("content").entries();
+
+        if(contents == null || contents.size() == 0){
+            synchronized (this) {
+                // 获取到content下的所有缓存数据
+                contents = redisTemplate.boundHashOps("content").entries();
+                if(contents == null || contents.size() == 0) {
+                    // 查询所有的广告
+                    List<ContentCategory> contentCategoryList = contentCategoryService.findAll();
+                    if (contentCategoryList != null && contentCategoryList.size() > 0) {
+                        // 遍历所有的广告
+                        for (ContentCategory contentCategory : contentCategoryList) {
+                            Long categoryId = contentCategory.getId();
+                            ContentQuery contentQuery = new ContentQuery();
+                            contentQuery.createCriteria().andCategoryIdEqualTo(categoryId).
+                                    andStatusEqualTo("1");	// 根据分类查询并且可用的广告
+                            contentQuery.setOrderByClause("sort_order desc");	// 根据该字段排序
+                            // 查询
+                            List<Content> contentList = contentDao.selectByExample(contentQuery);
+                            contents.put(contentCategory.getId().toString(),contentList);
+                        }
+                    }
+                }
+            }
+		}
+		return contents;
+	}
 
 
 }
