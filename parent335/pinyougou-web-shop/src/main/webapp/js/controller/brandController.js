@@ -70,7 +70,6 @@ app.controller("brandController",function($scope,$controller,brandService){
 	}
 	
 	$scope.searchEntity={};
-    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
 	
 	// 假设定义一个查询的实体：searchEntity
 	$scope.search = function(page,rows){
@@ -80,19 +79,5 @@ app.controller("brandController",function($scope,$controller,brandService){
 			$scope.list = response.rows;
 		});
 	}
-
-
-    // $scope.status = ["未审核","审核通过","审核未通过","关闭"];
-    //
-    // $scope.itemCatList = [];
-    // // 显示分类:
-    // $scope.findItemCatList = function(){
-    //
-    //     itemCatService.findAll().success(function(response){
-    //         for(var i=0;i<response.length;i++){
-    //             $scope.itemCatList[response[i].id] = response[i].name;
-    //         }
-    //     });
-    // }
 	
 });
