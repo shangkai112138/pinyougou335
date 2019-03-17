@@ -16,4 +16,6 @@ public interface UserService {
      * @param smscode
      */
     public void add(User user, String smscode);
+
+    User findOne(String username);
 }

@@ -90,8 +90,6 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 		});
 	}
 
-<<<<<<< HEAD
-
     // $scope.status = ["未审核","审核通过","审核未通过","关闭"];
     //
     // $scope.itemCatList = [];
@@ -104,7 +102,6 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
     //         }
     //     });
     // }
-=======
     // 显示状态
     $scope.status = ["未审核","审核通过","审核未通过","关闭"];
 
@@ -119,6 +116,4 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
             }
         });
     }
->>>>>>> origin/master
-	
 });

@@ -10,12 +10,9 @@ import java.io.OutputStream;
 import java.util.List;
 
 /**
+ *
  * 导出excel
- * @param title  导出表的标题
- * @param rowsName 导出表的列名
- * @param dataList  需要导出的数据
- * @param fileName  生成excel文件的文件名
- * @param response
+
  */
 public class ExcelUtils {
     public void exportExcel(String title, String[] rowsName, List<Object[]> dataList, String fileName, HttpServletResponse response) throws Exception {

@@ -1,5 +1,7 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.service.user.UserService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +18,8 @@ import java.util.Set;
 public class UserDetailServiceImpl implements UserDetailsService {
 
 
+    @Reference
+    private UserService userService;
     /**
      * 授权
      * @param username
@@ -27,6 +31,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
         SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
         authorities.add(grantedAuthority);
+        if(username != null && !"".equals(username.trim())){
+          cn.itcast.core.pojo.user.User u = userService.findOne(username);
+        }
+
+
         User user = new User(username, "", authorities);
         return user;
     }
