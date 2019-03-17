@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../js/controller/brandController.js"></script>
     <script type="text/javascript" src="../js/service/brandService.js"></script>
 </head>
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController" ng-init="searchEntity={auditStatus:'0'}">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController" ng-init="searchEntity.status=0">
   <!-- .box-body -->
                     <div class="box-header with-border">
                         <h3 class="box-title">品牌审核</h3>
@@ -64,6 +64,7 @@
 										  <th class="sorting_asc">品牌ID</th>
 									      <th class="sorting">品牌名称</th>									      
 									      <th class="sorting">品牌首字母</th>
+									      <th class="sorting">状态值</th>
 										  <th class="sorting">状态</th>
 					                      <th class="text-center">操作</th>
 			                          </tr>
@@ -74,9 +75,10 @@
 				                          <td>{{entity.id}}</td>
 									      <td>{{entity.name}}</td>									     
 		                                  <td>{{entity.firstChar}}</td>
+										  <td>{{entity.status}}</td>
 										  <td>
 		                                  	<span>
-		                                  		{{status[entity.auditStatus]}}
+		                                  		{{status[entity.status]}}
 		                                  	</span>
 										  </td>
 		                                  <td class="text-center">                                           
@@ -95,7 +97,7 @@
 						<tm-pagination conf="paginationConf"></tm-pagination>
                         
                      </div>
-                     {{selectIds}}
+
                     <!-- /.box-body -->
          
 <!-- 编辑窗口 -->
