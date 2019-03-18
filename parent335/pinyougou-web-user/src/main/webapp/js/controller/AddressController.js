@@ -1,6 +1,7 @@
 // 定义控制器:
 app.controller("AddressController",function($scope,$http,AddressService){
 
+
     $scope.findAll = function(){
         // 向后台发送请求:
         AddressService.findAll().success(function(response){

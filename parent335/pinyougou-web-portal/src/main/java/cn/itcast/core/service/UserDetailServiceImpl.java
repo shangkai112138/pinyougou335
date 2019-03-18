@@ -31,11 +31,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
         SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
         authorities.add(grantedAuthority);
-        if(username != null && !"".equals(username.trim())){
-          cn.itcast.core.pojo.user.User u = userService.findOne(username);
-        }
-
-
         User user = new User(username, "", authorities);
         return user;
     }
