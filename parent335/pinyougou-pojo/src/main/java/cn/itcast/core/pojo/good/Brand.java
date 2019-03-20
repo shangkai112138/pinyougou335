@@ -21,15 +21,9 @@ public class Brand implements Serializable {
 
     private String firstChar;
 
-
-
-
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-
-
 
     private static final long serialVersionUID = 1L;
 
@@ -48,6 +42,7 @@ public class Brand implements Serializable {
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
+
 
     public String getFirstChar() {
         return firstChar;

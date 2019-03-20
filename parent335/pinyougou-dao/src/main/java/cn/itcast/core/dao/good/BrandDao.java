@@ -37,4 +37,5 @@ public interface BrandDao {
 
     // 新增模板时需要加载的品牌结果集
     List<Map> selectOptionList();
+
 }
