@@ -35,6 +35,7 @@
 <!-- .box-body -->
 <div class="box-header with-border">
     <h3 class="box-title">订单管理</h3>
+    <h3 class="box-title">订单查询</h3>
 </div>
 <div class="box-body">
     <!-- 数据表格 -->
@@ -127,11 +128,11 @@
                             </tr>
                             <tr>
                                 <td>付款方式</td>
-                                <td>{{entity.paymentType}}</td>
+                                <td>{{PaymentType[entity.paymentType]}}</td>
                             </tr>
                             <tr>
                                 <td>订单状态</td>
-                                <td>{{entity.status}}</td>
+                                <td>{{Status[entity.status]}}</td>
                             </tr>
                             <tr>
                                 <td>创建时间</td>

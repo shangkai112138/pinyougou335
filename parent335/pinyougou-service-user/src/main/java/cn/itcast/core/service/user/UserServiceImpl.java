@@ -1,10 +1,13 @@
 package cn.itcast.core.service.user;
 
 import cn.itcast.core.dao.user.UserDao;
+import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.pojo.user.UserQuery;
 import cn.itcast.core.utils.md5.MD5Util;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jms.core.JmsTemplate;
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Resource
     private JmsTemplate jmsTemplate;
@@ -75,7 +78,6 @@ public class UserServiceImpl implements UserService{
             String password = MD5Util.MD5Encode(user.getPassword(), null);
             user.setPassword(password);
             user.setCreated(new Date());
-            user.setStatus("0");
             user.setUpdated(new Date());
             userDao.insertSelective(user);
         }else{
@@ -88,4 +90,96 @@ public class UserServiceImpl implements UserService{
         User user = userDao.selectByUsername(username.trim());
         return user;
     }
+
+    /**
+     * 查询所有用户
+     *
+     * @return
+     */
+    @Override
+    public List<User> findAll() {
+        return userDao.selectByExample(null);
+    }
+
+    /**
+     * 修改用户状态
+     */
+    @Transactional
+    @Override
+    public void updateStatus(Long id, String status) {
+        User user = new User();
+        user.setId(id);
+        if (status.equals("1")) {
+            user.setStatus("0");
+        }
+        if (status.equals("0")) {
+            user.setStatus("1");
+        }
+        userDao.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param page
+     * @param rows
+     * @param user
+     * @return
+     */
+    @Override
+    public PageResult search(Integer page, Integer rows, User user) {
+        //利用分页助手实现分页, 第一个参数:当前页, 第二个参数: 每页展示数据条数
+        PageHelper.startPage(page, rows);
+        UserQuery userQuery = new UserQuery();
+        UserQuery.Criteria criteria = userQuery.createCriteria();
+        if (user != null) {
+            if (user.getUsername() != null && !"".equals(user.getUsername())) {
+                criteria.andNameLike("%" + user.getUsername() + "%");
+            }
+        }
+        Page<User> userList = (Page<User>) userDao.selectByExample(userQuery);
+        return new PageResult(userList.getTotal(), userList.getResult());
+    }
+
+    /**
+     * 查询用户
+     * @param username
+     * @return
+     */
+    @Override
+    public User findUsername(String username) {
+        return userDao.selectByPrimaryUsername(username);
+    }
+
+    /**
+     * 查询用户Status状态且修改活跃值
+     * @param username
+     * @return
+     */
+    @Override
+    public boolean findStatus(String username) {
+        User user = findUsername(username);
+        if (user != null && !"".equals(user)){
+            if ("0".equals(user.getStatus())){
+                User users = new User();
+                users.setId(user.getId());
+                users.setExperienceValue(user.getExperienceValue()+1);
+                users.setLastLoginTime(new Date());
+                userDao.updateByPrimaryKeySelective(users);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 根据ID查询用户
+     * @param id
+     * @return
+     */
+    @Override
+    public User findOne(Long id) {
+        return userDao.selectByPrimaryKey(id);
+    }
+
 }

@@ -30,4 +30,7 @@ public interface UserDao {
     int updateByPrimaryKey(User record);
 
     User selectByUsername(String  username);
+
+    // 查询
+    User selectByPrimaryUsername(String username);
 }

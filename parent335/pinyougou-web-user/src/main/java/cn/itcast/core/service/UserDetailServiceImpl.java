@@ -1,5 +1,6 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.service.user.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,14 @@ import java.util.Set;
  */
 public class UserDetailServiceImpl implements UserDetailsService {
 
+
+    //注入userService
+    private UserService userService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     /**
      * 之前：认证+授权
      * 现在：只需要授权
@@ -24,11 +33,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
-        authorities.add(grantedAuthority);
-        System.out.println("username"+username);
-        User user = new User(username, "", authorities);
-        return user;
+        boolean flag = userService.findStatus(username);
+        if (flag){
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+            authorities.add(grantedAuthority);
+            User user = new User(username, "", authorities);
+            return user;
+        }
+        throw new UsernameNotFoundException(username);
     }
 }

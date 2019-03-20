@@ -58,6 +58,7 @@ public class SpecServiceImpl implements SpecService {
     public void add(SpecVo specVo) {
         // 保存规格
         Specification specification = specVo.getSpecification();
+        specification.setStatus((long) 0);
         // 返回自增主键的id，需要在映射文件中去配置
         specificationDao.insertSelective(specification);
         // 保存规格选项
@@ -144,5 +145,16 @@ public class SpecServiceImpl implements SpecService {
     @Override
     public List<Map> selectOptionList() {
         return specificationDao.selectOptionList();
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, Long status) {
+        if (ids != null && ids.length > 0) {
+            for (Long id : ids) {
+                Specification specification = specificationDao.selectByPrimaryKey(id);
+                specification.setStatus(status);
+                specificationDao.updateByPrimaryKeySelective(specification);
+            }
+        }
     }
 }
