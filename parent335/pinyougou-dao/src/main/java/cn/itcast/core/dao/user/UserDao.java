@@ -28,4 +28,7 @@ public interface UserDao {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    // 查询
+    User selectByPrimaryUsername(String username);
 }

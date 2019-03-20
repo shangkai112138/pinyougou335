@@ -2,6 +2,7 @@ package cn.itcast.core.dao.order;
 
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.vo.SellerCountVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +29,7 @@ public interface OrderDao {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    //查询饼状图数据
+    List<SellerCountVo> selectPieChartData();
 }

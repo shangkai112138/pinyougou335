@@ -3,12 +3,16 @@ package cn.itcast.core.service.order;
 import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
+import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.cart.Cart;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.utils.uniquekey.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -83,5 +87,40 @@ public class OrderServiceImpl implements OrderService {
         }
         // 删除购物车
         redisTemplate.boundHashOps("BUYER_CART").delete(username);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        List<Order> orderList = orderDao.selectByExample(null);
+        return orderList;
+    }
+
+
+    /**
+     * 条件查询加分页,如果没有条件,查询所有订单
+     * @param order
+     * @param page
+     * @param rows
+     * @return
+     */
+    @Override
+    public PageResult findPage(Order order, Integer page, Integer rows) {
+        //利用分页助手
+        PageHelper.startPage(page,rows);
+        OrderQuery query = new OrderQuery();
+        OrderQuery.Criteria criteria = query.createCriteria();
+        if (order != null){
+            if (order.getOrderId() != null && !"".equals(order.getOrderId())){
+                criteria.andOrderIdEqualTo(order.getOrderId());
+            }
+        }
+        Page<Order> orderList =(Page<Order>) orderDao.selectByExample(query);
+        return new PageResult(orderList.getTotal(), orderList.getResult());
+    }
+
+    @Override
+    public Order findById(Long orderId) {
+        Order order = orderDao.selectByPrimaryKey(orderId);
+        return order;
     }
 }
