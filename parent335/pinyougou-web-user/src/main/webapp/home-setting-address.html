@@ -14,10 +14,10 @@
 
 	<script type="text/javascript" src="js/controller/AddressController.js"></script>
 	<script type="text/javascript" src="js/service/AddressService.js"></script>
-
+	<script type="text/javascript" src="js/service/loginService.js"></script>
 </head>
 
-<body ng-app="pinyougou" ng-controller="AddressController" ng-init="findAll()">
+<body ng-app="pinyougou" ng-controller="AddressController" ng-init="showName()">
 <!-- 头部栏位 -->
 <!--页面顶部-->
 <div id="nav-bottom">
@@ -28,7 +28,8 @@
 				<div class="shortcut">
 					<ul class="fl">
 						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+						<li class="f-item">{{loginName}}</li>
+						<li class="f-item"><a href="/logout/cas">退出登录</a></li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -150,7 +151,9 @@
 <script type="text/javascript" src="js/plugins/birthday/birthday.js"></script>
 <script type="text/javascript" src="js/plugins/citypicker/distpicker.data.js"></script>
 <script type="text/javascript" src="js/plugins/citypicker/distpicker.js"></script>
+<!--
 <script type="text/javascript" src="js/plugins/upload/uploadPreview.js"></script>
+-->
 <script type="text/javascript" src="js/pages/main.js"></script>
 </body>
 <!--header-->
@@ -163,7 +166,7 @@
 				<div class="person-info">
 					<div class="person-photo"><img src="img/_/photo.png" alt=""></div>
 					<div class="person-account">
-						<span class="name">Michelle</span>
+						<span class="name">{{loginName}}</span>
 						<span class="safe">账户安全</span>
 					</div>
 					<div class="clearfix"></div>
@@ -198,7 +201,7 @@
 				<div class="body userAddress">
 					<div class="address-title">
 						<span class="title">地址管理</span>
-						<a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new">添加新地址</a>
+						<a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new" ng-click="clear()">添加新地址</a>
 						<span class="clearfix"></span>
 					</div>
 					<div class="address-detail">
@@ -217,9 +220,10 @@
 								<td>{{entity.provinceId}} {{entity.cityId}} {{entity.townId}} {{entity.address}}</td>
 								<td>{{entity.mobile}}</td>
 								<td>
-									<a href="#">编辑</a>
+									<a data-toggle="modal" data-target=".edit" data-keyboard="false"  class="sui-btn  btn-info add-new" ng-click="findOne(entity.id)">编辑</a>
 									<a href="#" ng-click="delete(entity.id)">删除</a>
-									<a href="#" ng-if="entity.isDefault=1">默认地址</a>
+									<a href="#" ng-if="entity.isDefault == 1">默认地址</a>
+									<a href="#" ng-if="entity.isDefault == 0" ng-click="setDefaultAddress(entity.id)" >设置为默认地址</a>
 								</td>
 							</tr>
 
@@ -232,7 +236,8 @@
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
-									<h4 id="myModalLabel" class="modal-title">新增地址</h4>
+									<h4  class="modal-title" ng-if="entity.id == null">新增地址</h4>
+									<h4  class="modal-title" ng-if="entity.id != null">编辑地址</h4>
 								</div>
 								<div class="modal-body">
 									<form action="" class="sui-form form-horizontal">
@@ -247,13 +252,16 @@
 											<div class="controls">
 												<div data-toggle="distpicker">
 													<div class="form-group area">
-														<select class="form-control" ng-model="entity.provinceId" id="province1"></select>
+														<select class="form-control" ng-model="entity.provinceId" ng-options="provinces.provinceid as provinces.province for provinces in provincesList">
+														</select>
 													</div>
 													<div class="form-group area">
-														<select class="form-control" ng-model="entity.cityId" id="city1"></select>
+														<select class="form-control" ng-model="entity.cityId" ng-options="cities.cityid as cities.city for cities in citiesList">
+														</select>
 													</div>
 													<div class="form-group area">
-														<select class="form-control" ng-model="entity.townId" id="district1"></select>
+														<select class="form-control" ng-model="entity.townId" ng-options="areas.areaid as areas.area for areas in areasList">
+														</select>
 													</div>
 												</div>
 											</div>
@@ -285,13 +293,12 @@
 												建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
 											</div>
 										</div>
-
 									</form>
 
 
 								</div>
 								<div class="modal-footer">
-									<button type="button" data-ok="modal" class="sui-btn btn-primary btn-large" ng-click="insert()">确定</button>
+									<button type="button" data-ok="modal" class="sui-btn btn-primary btn-large" ng-click="save()">确定</button>
 									<button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
 								</div>
 							</div>
