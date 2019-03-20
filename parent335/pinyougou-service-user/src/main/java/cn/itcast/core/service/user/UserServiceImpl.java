@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户获取短信验证码
-     *
      * @param phone
      */
     @Override
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
         // 将获取短信验证码的数据发送到mq中
         // 手机号、验证码、签名、模板
         final String code = RandomStringUtils.randomNumeric(6);
-        System.out.println("code:" + code);
+        System.out.println("code:"+code);
         // 保存验证码
         redisTemplate.boundValueOps(phone).set(code);
         // 设置验证码的过期时间
@@ -58,7 +57,7 @@ public class UserServiceImpl implements UserService {
                 mapMessage.setString("phoneNumbers", phone);
                 mapMessage.setString("signName", "阮文");
                 mapMessage.setString("templateCode", "SMS_140720901");
-                mapMessage.setString("templateParam", "{\"code\":\"" + code + "\"}");
+                mapMessage.setString("templateParam", "{\"code\":\""+code+"\"}");
                 return mapMessage;
             }
         });
@@ -66,7 +65,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户注册
-     *
      * @param user
      * @param smscode
      */
@@ -75,17 +73,22 @@ public class UserServiceImpl implements UserService {
     public void add(User user, String smscode) {
         // 校验验证码是否正确
         String code = (String) redisTemplate.boundValueOps(user.getPhone()).get();
-        if (smscode != null && !"".equals(smscode) && smscode.equals(code)) {
+        if(smscode != null && !"".equals(smscode) && smscode.equals(code)){
             // 对密码加密
             String password = MD5Util.MD5Encode(user.getPassword(), null);
             user.setPassword(password);
-            user.setStatus("0");
             user.setCreated(new Date());
             user.setUpdated(new Date());
             userDao.insertSelective(user);
-        } else {
+        }else{
             throw new RuntimeException("输入的验证码不正确");
         }
+    }
+
+    @Override
+    public User findOne(String username) {
+        User user = userDao.selectByUsername(username.trim());
+        return user;
     }
 
     /**

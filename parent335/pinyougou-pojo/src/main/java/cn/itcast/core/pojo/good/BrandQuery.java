@@ -128,6 +128,10 @@ public class BrandQuery {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
+        public Criteria andStatusEqualTo(Long value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
 
         public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");

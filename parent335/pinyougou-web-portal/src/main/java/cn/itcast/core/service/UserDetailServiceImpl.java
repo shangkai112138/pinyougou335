@@ -1,6 +1,7 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.service.user.UserService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -41,5 +42,4 @@ public class UserDetailServiceImpl implements UserDetailsService {
         }
         throw new UsernameNotFoundException(username);
     }
-
 }

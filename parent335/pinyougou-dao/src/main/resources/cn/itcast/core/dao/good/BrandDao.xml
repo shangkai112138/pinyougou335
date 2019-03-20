@@ -66,7 +66,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, first_char
+      id, name, first_char,status
     </if>
     <if test="fields != null" >
       ${fields}
@@ -91,6 +91,12 @@
     id,name,first_char
     from tb_brand
     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByStatus" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    id,name,first_char,status
+    from tb_brand
+    where status = #{status,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_brand
@@ -120,6 +126,9 @@
       <if test="firstChar != null" >
         first_char,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -130,6 +139,9 @@
       </if>
       <if test="firstChar != null" >
         #{firstChar,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>

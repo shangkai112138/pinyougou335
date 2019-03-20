@@ -245,4 +245,8 @@
       sort_order = #{sortOrder,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 根据指定id查询 -->
+  <select id="findByCategoryId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select * from tb_content where category_id = #{categoryId} and status = "1" order by sort_order desc
+  </select>
 </mapper>

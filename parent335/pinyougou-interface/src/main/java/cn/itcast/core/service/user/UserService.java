@@ -60,4 +60,6 @@ public interface UserService {
      * @return
      */
     User findOne(Long id);
+
+    User findOne(String username);
 }

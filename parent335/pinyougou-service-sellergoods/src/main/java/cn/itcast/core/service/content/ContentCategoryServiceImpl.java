@@ -1,8 +1,10 @@
 package cn.itcast.core.service.content;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.itcast.core.entity.PageResult;
+import cn.itcast.core.pojo.ad.Content;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -56,7 +58,6 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		}
 		
 	}
-
 
 
 }

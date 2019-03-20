@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +86,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     @Override
     public void add(Brand brand) {
+        brand.setStatus((long) 0);
         brandDao.insertSelective(brand);
     }
 
