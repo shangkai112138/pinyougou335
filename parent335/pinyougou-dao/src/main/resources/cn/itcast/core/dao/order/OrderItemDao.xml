@@ -99,6 +99,16 @@
     from tb_order_item
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="findTotalMoneyGroupByGoodsIdForSellId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT goods_id,sum(total_fee) AS totalFee  FROM
+	(   SELECT
+		goods_id,total_fee
+	    FROM
+		tb_order_item
+	    WHERE seller_id = #{sellerId,jdbcType=VARCHAR}
+    )   AS tab
+    GROUP BY goods_id
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_order_item
     where id = #{id,jdbcType=BIGINT}

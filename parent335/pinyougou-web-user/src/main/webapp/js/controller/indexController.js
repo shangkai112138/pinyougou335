@@ -30,10 +30,4 @@ app.controller('indexController',function($scope,$controller,$http,loginService,
             $scope.orderList = response.rows;
         });
     }
-
-
-
-
-
-
 });

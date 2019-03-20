@@ -84,6 +84,17 @@ app.controller('orderManagerController' ,function($scope,$controller   ,orderSer
         );
     }
 
+    // 支付类型显示状态
+    $scope.PaymentType = ["","在线支付","货到付款"];
+
+    // 支付类型显示状态
+    $scope.Status = ["","未付款","已付款","未发货","已发货","交易成功","交易关闭","待评价"];
+
+    // 支付类型显示状态
+    $scope.PaymentType = ["","在线支付","货到付款"];
+
+    // 支付类型显示状态
+    $scope.PaymentType = ["","在线支付","货到付款"];
 
 
     // $scope.addTableRow = function(){

@@ -22,6 +22,8 @@ public interface BrandDao {
 
     Brand selectByPrimaryKey(Long id);
 
+    List<Brand> selectByStatus(Long status);
+
     int updateByExampleSelective(@Param("record") Brand record, @Param("example") BrandQuery example);
 
     int updateByExample(@Param("record") Brand record, @Param("example") BrandQuery example);

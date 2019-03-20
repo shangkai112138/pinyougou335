@@ -8,6 +8,7 @@ import cn.itcast.core.pojo.cart.Cart;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.utils.uniquekey.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -107,5 +108,40 @@ public class OrderServiceImpl implements OrderService {
         }
         // 3、将结果封装到PageResult对象中
         return new PageResult(pages.getTotal(),orderList);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        List<Order> orderList = orderDao.selectByExample(null);
+        return orderList;
+    }
+
+
+    /**
+     * 条件查询加分页,如果没有条件,查询所有订单
+     * @param order
+     * @param page
+     * @param rows
+     * @return
+     */
+    @Override
+    public PageResult findPage(Order order, Integer page, Integer rows) {
+        //利用分页助手
+        PageHelper.startPage(page,rows);
+        OrderQuery query = new OrderQuery();
+        OrderQuery.Criteria criteria = query.createCriteria();
+        if (order != null){
+            if (order.getOrderId() != null && !"".equals(order.getOrderId())){
+                criteria.andOrderIdEqualTo(order.getOrderId());
+            }
+        }
+        Page<Order> orderList =(Page<Order>) orderDao.selectByExample(query);
+        return new PageResult(orderList.getTotal(), orderList.getResult());
+    }
+
+    @Override
+    public Order findById(Long orderId) {
+        Order order = orderDao.selectByPrimaryKey(orderId);
+        return order;
     }
 }

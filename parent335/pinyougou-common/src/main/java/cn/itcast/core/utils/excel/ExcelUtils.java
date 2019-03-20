@@ -7,24 +7,44 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
+ *
  * 导出excel
- * @param title  导出表的标题
- * @param rowsName 导出表的列名
- * @param dataList  需要导出的数据
- * @param fileName  生成excel文件的文件名
- * @param response
+
  */
-public class ExcelUtils {
-    public void exportExcel(String title, String[] rowsName, List<Object[]> dataList, String fileName, HttpServletResponse response) throws Exception {
+public  class  ExcelUtils {
+
+    public  void exportExcel(String title, String[] rowsName, List<Object[]> dataList, String fileName, HttpServletResponse response) throws Exception {
+        //设置响应头信息
+        this.setResponseHeader(response,fileName);
         OutputStream output = response.getOutputStream();
-        response.reset();
-        response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-        response.setContentType("application/msexcel");
         this.export(title, rowsName, dataList, fileName, output);
         this.close(output);
+    }
+
+    /**
+     * 设置响应头信息
+     * @param response
+     * @param fileName
+     */
+    private void setResponseHeader(HttpServletResponse response, String fileName) {
+        try {
+            try {
+                fileName = new String(fileName.getBytes(),"ISO8859-1");
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            response.setContentType("application/octet-stream;charset=ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
+            response.addHeader("Pargam", "no-cache");
+            response.addHeader("Cache-Control", "no-cache");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     /*
      * 导出数据
@@ -59,14 +79,9 @@ public class ExcelUtils {
                 HSSFRow row = sheet.createRow(i + 3);   // 创建所需的行数
                 for (int j = 0; j < obj.length; j++) {
                     HSSFCell cell = null;   // 设置单元格的数据类型
-                    if (j == 0) {
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_NUMERIC);
-                        cell.setCellValue(i + 1);
-                    } else {
-                        cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
-                        if (!"".equals(obj[j]) && obj[j] != null) {
-                            cell.setCellValue(obj[j].toString()); // 设置单元格的值
-                        }
+                    cell = row.createCell(j, HSSFCell.CELL_TYPE_STRING);
+                    if (!"".equals(obj[j]) && obj[j] != null) {
+                        cell.setCellValue(obj[j].toString()); // 设置单元格的值
                     }
                     cell.setCellStyle(style); // 设置单元格样式
                 }
@@ -100,6 +115,7 @@ public class ExcelUtils {
                 }
             }
             workbook.write(out);
+            out.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }

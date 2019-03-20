@@ -10,7 +10,7 @@ public class Brand implements Serializable {
      */
     private String name;
 
-    private Long   status;
+    private Long  status;
 
     public Brand() {
     }

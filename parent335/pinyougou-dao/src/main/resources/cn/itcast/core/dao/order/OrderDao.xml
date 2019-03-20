@@ -530,4 +530,11 @@
       seller_id = #{sellerId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+
+
+  <!-- 查询饼状图数据-->
+  <select id="selectPieChartData"  resultType="cn.itcast.core.vo.SellerCountVo">
+        SELECT seller_id AS name,COUNT(seller_id) AS value FROM tb_order GROUP BY seller_id
+</select>
+
 </mapper>

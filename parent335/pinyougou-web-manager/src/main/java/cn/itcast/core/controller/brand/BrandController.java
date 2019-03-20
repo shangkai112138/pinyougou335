@@ -42,14 +42,14 @@ public class BrandController {
 
     /**
      * 条件查询
-     * @param pageNo
-     * @param pageSize
+     * @param page
+     * @param rows
      * @param brand
      * @return
      */
     @RequestMapping("/search.do")
-    public PageResult search(Integer pageNo, Integer pageSize, @RequestBody Brand brand){
-        return brandService.search(pageNo, pageSize, brand);
+    public PageResult search(Integer page, Integer rows, @RequestBody Brand brand){
+        return brandService.search(page, rows, brand);
     }
 
     /**

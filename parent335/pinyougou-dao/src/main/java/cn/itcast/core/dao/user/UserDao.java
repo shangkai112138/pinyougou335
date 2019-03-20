@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+
 public interface UserDao {
     int countByExample(UserQuery example);
 
@@ -35,4 +36,9 @@ public interface UserDao {
      * @return
      */
     User findUserByName(String name);
+
+    User selectByUsername(String  username);
+
+    // 查询
+    User selectByPrimaryUsername(String username);
 }

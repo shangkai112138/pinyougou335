@@ -6,6 +6,7 @@ import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.service.spec.SpecService;
 import cn.itcast.core.vo.SpecVo;
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,5 +98,17 @@ public class SpecController {
     @RequestMapping("/selectOptionList.do")
     public List<Map> selectOptionList(){
         return specService.selectOptionList();
+    }
+
+    @Transactional
+    @RequestMapping("/updateStatus.do")
+    public Result updateStatus(Long[] ids, Long status) {
+        try {
+            specService.updateStatus(ids, status);
+            return new Result(true, "审核通过");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "审核失败");
+        }
     }
 }
