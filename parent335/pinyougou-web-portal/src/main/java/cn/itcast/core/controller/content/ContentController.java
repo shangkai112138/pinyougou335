@@ -1,7 +1,7 @@
 package cn.itcast.core.controller.content;
 
 import cn.itcast.core.pojo.ad.Content;
-import cn.itcast.core.pojo.ad.ContentCategory;
+import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.service.content.ContentCategoryService;
 import cn.itcast.core.service.content.ContentService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -37,8 +37,19 @@ public class ContentController {
      */
     @RequestMapping("/findContent.do")
     public Map<Object,Object> findContent(){
-        Map<Object, Object> content = contentService.findContent();
+        // Map<Object, Object> content = contentService.findContent();
         return contentService.findContent();
+    }
+
+    /**
+     * 加载商品分类
+     * @param parentId
+     * @return
+     */
+    @RequestMapping("/findByParentId.do")
+    public List<ItemCat> findByParentId(Long parentId){
+
+        return contentService.findByParentId(parentId);
     }
 
 }

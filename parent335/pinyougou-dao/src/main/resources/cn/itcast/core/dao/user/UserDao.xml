@@ -482,4 +482,7 @@
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="findUserByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from tb_user where username = #{username}
+  </select>
 </mapper>

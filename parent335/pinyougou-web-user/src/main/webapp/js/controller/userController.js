@@ -1,5 +1,5 @@
 //控制层
-app.controller('userController' ,function($scope,$controller   ,userService,uploadService){
+app.controller('userController' ,function($scope,$controller ,userService,uploadService){
 
     //注册用户
     $scope.reg=function(){
@@ -48,6 +48,15 @@ app.controller('userController' ,function($scope,$controller   ,userService,uplo
     //查询实体
     $scope.findOne=function(id){
         itemCatService.findOne(id).success(
+            function(response){
+                $scope.entity= response;
+            }
+        );
+    }
+
+    // 用户回显
+    $scope.showUser=function(){
+        userService.showUser().success(
             function(response){
                 $scope.entity= response;
             }

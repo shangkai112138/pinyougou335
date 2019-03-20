@@ -15,6 +15,13 @@ app.controller("contentController",function($scope,contentService){
         });
     }
 
+    $scope.itemCatList = [];
+    // 根据分类ID查询广告的方法:
+    $scope.findByParentId = function(parentId){
+        contentService.findByParentId(parentId).success(function(response){
+            $scope.itemCatList = response;
+        });
+    }
 
 	
 	//搜索  （传递参数）

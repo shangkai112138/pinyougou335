@@ -28,4 +28,11 @@ public interface ItemDao {
     int updateByPrimaryKeySelective(Item record);
 
     int updateByPrimaryKey(Item record);
+
+    /**
+     * 根据itemId来进行查询
+     * @param itemId
+     * @return
+     */
+    Item findByItemId(Long itemId);
 }

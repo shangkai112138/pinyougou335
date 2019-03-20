@@ -2,6 +2,7 @@ package cn.itcast.core.service.cart;
 
 import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.dao.seller.SellerDao;
+import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.cart.Cart;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.OrderItem;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -86,6 +88,45 @@ public class CartServiceImpl implements CartService {
         List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("BUYER_CART").get(username);
         return cartList;
     }
+
+    /**
+     * 添加收藏
+     * @param itemId
+     */
+    @Override
+    public Result addCllect(Long itemId) {
+        // 通过itemId获取item
+        List<Item> cllectList = new ArrayList<>();
+        List<Item> cllect = (List<Item>) redisTemplate.boundHashOps("BUYER_CLLECT").get("cllect");
+        // 判断cllect是否为null
+        if (cllect != null && cllect.size() >= 0) {
+            // 根据itemId来查询出要添加的商品
+            Item item1 = itemDao.findByItemId(itemId);
+            // 如果item已经存在则直接添加
+            int indexOf = cllect.indexOf(item1);
+            if (indexOf == -1) {
+                for (Item item : cllect) {
+                    cllectList.add(item);
+                }
+                cllect.add(item1);
+                // 清空redis
+                redisTemplate.boundHashOps("BUYER_CLLECT").delete("cllect");
+                // 将集合添加到Redis中
+                redisTemplate.boundHashOps("BUYER_CLLECT").put("cllect", cllectList);
+                return new Result(true, "收藏成功成功");
+            } else {
+                // 没有则返回状态
+                return new Result(false, "收藏里已有该商品");
+            }
+        }else {
+            // 根据itemId来查询出要添加的商品
+            Item item1 = itemDao.findByItemId(itemId);
+            cllectList.add(item1);
+            // 将集合添加到Redis中
+            redisTemplate.boundHashOps("BUYER_CLLECT").put("cllect", cllectList);
+            return new Result(true, "收藏成功");
+        }
+        }
 
     // 新车合并到老车中
     private List<Cart> mergeNewCartListToOldCartList(List<Cart> newCartList, List<Cart> oldCartList) {

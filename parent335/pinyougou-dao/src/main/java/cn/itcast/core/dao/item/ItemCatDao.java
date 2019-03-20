@@ -28,4 +28,11 @@ public interface ItemCatDao {
     int updateByPrimaryKeySelective(ItemCat record);
 
     int updateByPrimaryKey(ItemCat record);
+
+    /**
+     * 根据parentId查询分类
+     * @param parentId
+     * @return
+     */
+    List<ItemCat> findByParentId(Long parentId);
 }

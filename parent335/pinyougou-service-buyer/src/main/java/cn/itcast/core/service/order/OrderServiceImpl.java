@@ -3,12 +3,15 @@ package cn.itcast.core.service.order;
 import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
+import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.cart.Cart;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
 import cn.itcast.core.utils.uniquekey.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -83,5 +86,26 @@ public class OrderServiceImpl implements OrderService {
         }
         // 删除购物车
         redisTemplate.boundHashOps("BUYER_CART").delete(username);
+    }
+
+    /**
+     * 分页显示
+     * @param page
+     * @param rows
+     * @return
+     */
+    @Override
+    public PageResult findByPage(Integer page, Integer rows) {
+        // 1、通过分页助手设置其始行
+        PageHelper.startPage(page, rows);
+        // 2、查询
+        Page<Order> pages  = (Page<Order>) orderDao.selectByExample(null);
+         List<Order> orderList = pages.getResult();
+        for (Order order : orderList) {
+            OrderItem orderItem = orderItemDao.selectByPrimaryKey(order.getOrderId());
+            order.setOrderItem(orderItem);
+        }
+        // 3、将结果封装到PageResult对象中
+        return new PageResult(pages.getTotal(),orderList);
     }
 }

@@ -33,7 +33,11 @@ app.service('userService',function($http){
     this.sendCode=function(phone){
         return $http.get('../user/sendCode.do?phone='+phone);
     }
-
+    // 显示个人信息
+    this.showUser=function(){
+        return  $http.post('../user/showUser.do' );
+    }
+    // 修改个人信息
     this.updateUser=function(entity){
         return  $http.post('../user/updateUser.do',entity );
     }

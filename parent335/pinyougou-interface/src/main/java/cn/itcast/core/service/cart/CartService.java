@@ -1,5 +1,6 @@
 package cn.itcast.core.service.cart;
 
+import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.cart.Cart;
 import cn.itcast.core.pojo.item.Item;
 
@@ -34,4 +35,10 @@ public interface CartService {
      * @return
      */
     List<Cart> findCartListFromRedis(String username);
+
+    /**
+     * 添加收藏
+     * @param itemId
+     */
+    Result addCllect(Long itemId);
 }

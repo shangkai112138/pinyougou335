@@ -4,11 +4,16 @@ app.service('cartService',function($http){
 	this.findCartList=function(){
 		return $http.get('cart/findCartList.do');
 	}
-	
+
+	// 添加到我的收藏
+	this.addoCllect=function(itemId){
+        return $http.get('cart/addCllect.do?itemId='+itemId);
+	}
 	//添加商品到购物车
 	this.addGoodsToCartList=function(itemId,num){
 		return $http.get('cart/addGoodsToCartList.do?itemId='+itemId+'&num='+num);
 	}
+
 	
 	//求合计数
 	this.sum=function(cartList){

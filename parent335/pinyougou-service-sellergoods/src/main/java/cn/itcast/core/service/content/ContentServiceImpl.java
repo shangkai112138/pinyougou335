@@ -3,9 +3,12 @@ package cn.itcast.core.service.content;
 import java.util.List;
 import java.util.Map;
 
+import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.ad.ContentCategory;
 import cn.itcast.core.pojo.ad.ContentQuery;
+import cn.itcast.core.pojo.item.ItemCat;
+import cn.itcast.core.pojo.item.ItemCatQuery;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,15 +26,14 @@ import javax.annotation.Resource;
 @Service
 public class ContentServiceImpl implements ContentService {
 
-    private Object object;
 
 	@Resource
 	private ContentDao contentDao;
 
 	@Resource
 	private RedisTemplate<String, Object> redisTemplate;
-
-
+	@Resource
+	private ItemCatDao itemCatDao;
 	@Reference
 	private ContentCategoryService contentCategoryService;
 
@@ -135,7 +137,6 @@ public class ContentServiceImpl implements ContentService {
 	public Map<Object, Object> findContent() {
 		// 判断缓存中是否有广告
         Map<Object, Object> contents = redisTemplate.boundHashOps("content").entries();
-
         if(contents == null || contents.size() == 0){
             synchronized (this) {
                 // 获取到content下的所有缓存数据
@@ -161,6 +162,31 @@ public class ContentServiceImpl implements ContentService {
 		}
 		return contents;
 	}
+
+    /**
+     * 加载商品分类
+     * @param parentId
+     * @return
+     */
+    @Override
+    public List<ItemCat> findByParentId(Long parentId) {
+
+        // 根据parentid查询
+        List<ItemCat> itemCatList1 = itemCatDao.findByParentId(parentId);
+        // 遍历itemCats 查询到所有的二级分类
+        for (ItemCat itemCat : itemCatList1) {
+            // 将二级分类的Id再次查询并封装到itemCatList1中
+            List<ItemCat> itemCatList2 = itemCatDao.findByParentId(itemCat.getId());
+            itemCat.setItemCatList(itemCatList2);
+            // 遍历二级分类来拿到三级分类
+            for (ItemCat cat : itemCatList2) {
+                // 将三级分类添加到二级分类中
+                List<ItemCat> itemCatList3 = itemCatDao.findByParentId(cat.getId());
+                cat.setItemCatList(itemCatList3);
+            }
+        }
+        return itemCatList1;
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package cn.itcast.core.service.user;
 
 import cn.itcast.core.dao.user.UserDao;
+import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.utils.md5.MD5Util;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -8,11 +9,13 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.jms.*;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -79,5 +82,32 @@ public class UserServiceImpl implements UserService{
         }else{
             throw new RuntimeException("输入的验证码不正确");
         }
+    }
+
+    /**
+     * 查询所有收藏
+     * @return
+     */
+    @Override
+    public List<Item> findCllect() {
+        // 获取redis中的所有收藏
+        List<Item> itemList = (List<Item>) redisTemplate.boundHashOps("BUYER_CLLECT").get("cllect");
+        return itemList;
+    }
+
+    /**
+     * 用户回显
+     * @return
+     */
+    @Override
+    public User showUser(String name) {
+
+        // 判断用于是否登录
+        if (name != "anonymousUser"){
+            // 登录状态下根据用户名字去查找名字的详细信息
+            User user = userDao.findUserByName(name);
+            return user;
+        }
+        return null;
     }
 }

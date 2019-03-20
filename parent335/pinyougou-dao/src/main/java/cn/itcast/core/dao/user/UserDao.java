@@ -28,4 +28,11 @@ public interface UserDao {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    /**
+     * 根据名字来查询
+     * @param name
+     * @return
+     */
+    User findUserByName(String name);
 }

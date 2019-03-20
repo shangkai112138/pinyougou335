@@ -1,13 +1,17 @@
 package cn.itcast.core.controller.user;
 
 import cn.itcast.core.entity.Result;
+import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.service.user.UserService;
 import cn.itcast.core.utils.checkphone.PhoneFormatCheckUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -51,4 +55,27 @@ public class UserController {
             return new Result(false, "注册失败");
         }
     }
+
+    /**
+     * 查询所有我的收藏
+     * @return
+     */
+    @RequestMapping("/findCllect.do")
+    public List<Item> findCllect(){
+
+        List<Item> itemList = userService.findCllect();
+
+        return itemList;
+    }
+
+    /**
+     * 用户回显
+     * @return
+     */
+    @RequestMapping("/showUser.do")
+    public User showUser(){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.showUser(name);
+    }
+
 }
