@@ -41,7 +41,7 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 		}				
 		serviceObject.success(
 			function(response){
-				if(response.success){
+				if(response.flag){
 					//重新查询 
 		        	$scope.reloadList();//重新加载
 				}else{
@@ -57,7 +57,7 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 		//获取选中的复选框			
 		specificationService.dele( $scope.selectIds ).success(
 			function(response){
-				if(response.success){
+				if(response.flag){
 					$scope.reloadList();//刷新列表
 					$scope.selectIds = [];
 				}						
@@ -76,7 +76,7 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
     }
 
     $scope.searchEntity={};//定义搜索对象
-	
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
 	//搜索
 	$scope.search=function(page,rows){			
 		specificationService.search(page,rows,$scope.searchEntity).success(
@@ -88,12 +88,12 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	}
 
     // 显示状态
-    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+
 
     // 审核的方法:
     $scope.updateStatus = function(status){
         specificationService.updateStatus($scope.selectIds,status).success(function(response){
-            if(response.success){
+            if(response.flag){
                 $scope.reloadList();//刷新列表
                 $scope.selectIds = [];
             }else{

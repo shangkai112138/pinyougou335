@@ -130,6 +130,23 @@ public class Order implements Serializable {
      */
     private String sellerId;
 
+    /**
+     * 商品信息
+     */
+    private OrderItem orderItem;
+
+    public OrderItem getOrderItem() {
+        return orderItem;
+    }
+
+    public void setOrderItem(OrderItem orderItem) {
+        this.orderItem = orderItem;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public Long getOrderId() {

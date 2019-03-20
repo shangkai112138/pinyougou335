@@ -5,6 +5,7 @@ import java.util.Map;
 
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.ad.Content;
+import cn.itcast.core.pojo.item.ItemCat;
 
 public interface ContentService {
 
@@ -32,4 +33,11 @@ public interface ContentService {
 	 * @return
 	 */
 	Map<Object,Object> findContent();
+
+	/**
+	 * 加载商品分类
+	 * @param parentId
+	 * @return
+	 */
+	List<ItemCat> findByParentId(Long parentId);
 }

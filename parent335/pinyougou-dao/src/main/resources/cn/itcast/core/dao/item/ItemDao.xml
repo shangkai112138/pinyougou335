@@ -497,4 +497,9 @@
       seller = #{seller,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 根据ItemId来进行查询 -->
+  <select id="findByItemId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   SELECT * FROM tb_item WHERE id = #{id}
+  </select>
+
 </mapper>

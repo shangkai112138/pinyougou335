@@ -174,4 +174,21 @@ public class CartController {
         }
         return cartList;
     }
+
+    /**
+     * 添加收藏
+     * @param itemId
+     * @return
+     */
+    @RequestMapping("/addCllect.do")
+    public Result addCllect(Long itemId){
+
+        try {
+            Result result = cartService.addCllect(itemId);
+            return result;
+        } catch (Exception e) {
+            return new Result(false, "添加失败");
+        }
+
+    }
 }

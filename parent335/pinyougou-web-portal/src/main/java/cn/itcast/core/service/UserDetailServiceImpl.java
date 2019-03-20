@@ -17,9 +17,13 @@ import java.util.Set;
  */
 public class UserDetailServiceImpl implements UserDetailsService {
 
-
-    @Reference
+    //注入userService
     private UserService userService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     /**
      * 授权
      * @param username
@@ -28,10 +32,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
-        authorities.add(grantedAuthority);
-        User user = new User(username, "", authorities);
-        return user;
+        boolean flag = userService.findStatus(username);
+        if (flag){
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+            authorities.add(grantedAuthority);
+            User user = new User(username, "", authorities);
+            return user;
+        }
+        throw new UsernameNotFoundException(username);
     }
 }

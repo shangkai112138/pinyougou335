@@ -18,10 +18,10 @@
     <!-- 引入分页相关的JS和CSS -->
     <script type="text/javascript" src="/plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="/plugins/angularjs/pagination.css">
-    <script type="text/javascript" src="js/controller/baseController.js"></script>
-    <script type="text/javascript" src="js/service/loginService.js"></script>
-    <script type="text/javascript" src="js/controller/indexController.js"></script>
-    <script type="text/javascript" src="js/service/orderService.js"></script>
+    <script type="text/javascript" src="./js/controller/baseController.js"></script>
+    <script type="text/javascript" src="./js/service/loginService.js"></script>
+    <script type="text/javascript" src="./js/controller/indexController.js"></script>
+    <script type="text/javascript" src="./js/service/orderService.js"></script>
 
 </head>
 
@@ -37,6 +37,7 @@
                     <ul class="fl">
                         <li class="f-item">品优购欢迎您！</li>
                         <li class="f-item">{{loginName}}</li>
+                        <li class="f-item"><a href="/logout/cas">退出登录</a></li>
                     </ul>
                     <ul class="fr">
                         <li class="f-item">我的订单</li>
@@ -105,7 +106,6 @@
                                 </a>
                                 <div class="clearfix shopcarlist" id="shopcarlist" style="display:none">
                                     <p>"啊哦，你的购物车还没有商品哦！"</p>
-                                    <p>"啊哦，你的购物车还没有商品哦！"</p>
                                 </div>
                             </div>
                         </div>
@@ -162,12 +162,10 @@
         <div class="yui3-g home">
             <!--左侧列表-->
             <div class="yui3-u-1-6 list">
-
                 <div class="person-info">
-                    <div class="person-photo"><img src="{{img}}" alt=""></div>
                     <div class="person-account">
                         <span class="name">{{loginName}}</span>
-                        <span class="safe"><a href="logout/cas">退出登录 </a></span>
+                        <span class="safe">账户安全</span>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -225,16 +223,16 @@
                                 </div>
                                 <table class="sui-table table-bordered order-datatable">
                                     <tbody>
-                                        <tr ng-repeat="order in entity.orderItems">
+                                        <tr >
                                             <td width="35%">
                                                 <div class="typographic"><img src="img/goods.png" />
-                                                    <a href="#" class="block-text">{{order.title}}</a>
+                                                    <a href="#" class="block-text">{{entity.orderItem.title}}</a>
                                                 </div>
                                             </td>
                                             <td width="5%" class="center">
                                                 <ul class="unstyled">
                                                     <li class="o-price">¥599.00</li>
-                                                    <li>{{order.price}}</li>
+                                                    <li>{{entity.orderItem.price}}</li>
                                                 </ul>
                                             </td>
                                             <td width="5%" class="center">1</td>
@@ -243,7 +241,7 @@
                                             </td>
                                             <td width="10%" class="center" >
                                                 <ul class="unstyled">
-                                                    <li>{{order.price}}</li>
+                                                    <li>{{entity.orderItem.price}}</li>
                                                     <li>（含运费：￥0.00）</li>
                                                 </ul>
                                             </td>
@@ -256,6 +254,7 @@
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
 													<!--状态：1、未付款，2、已付款，3、未发货，4、已发货，5、交易成功，6、交易关闭,7、待评价-->
+                                                    <li><a href="#" class="sui-btn btn-info" ng-show="entity.status==0">待处理</a></li>
 													<li><a href="#" class="sui-btn btn-info" ng-show="entity.status==1">立即付款</a></li>
 													<li><a href="#" class="sui-btn btn-info" ng-show="entity.status==2">已付款</a></li>
 													<li><a href="#" class="sui-btn btn-info" ng-show="entity.status==3">待发货</a></li>

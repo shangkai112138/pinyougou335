@@ -48,4 +48,6 @@ public interface SpecService {
      * @return
      */
     List<Map> selectOptionList();
+
+    void updateStatus(Long[] ids, Long status);
 }

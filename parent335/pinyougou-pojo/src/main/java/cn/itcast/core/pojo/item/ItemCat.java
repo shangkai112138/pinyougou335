@@ -1,6 +1,7 @@
 package cn.itcast.core.pojo.item;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ItemCat implements Serializable {
     /**
@@ -24,6 +25,24 @@ public class ItemCat implements Serializable {
     private Long typeId;
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 用来封装下级Id
+     * @return
+     */
+    private List<ItemCat> itemCatList;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public List<ItemCat> getItemCatList() {
+        return itemCatList;
+    }
+
+    public void setItemCatList(List<ItemCat> itemCatList) {
+        this.itemCatList = itemCatList;
+    }
 
     public Long getId() {
         return id;

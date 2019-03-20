@@ -4,8 +4,7 @@ app.controller('indexController',function($scope,$controller,$http,loginService,
     $scope.showName=function(){
         loginService.showName().success(
             function(response){
-                $scope.img=response.img;
-                $scope.loginName=response.loginName;
+                $scope.loginName=response;
             }
         );
     }
@@ -31,10 +30,4 @@ app.controller('indexController',function($scope,$controller,$http,loginService,
             $scope.orderList = response.rows;
         });
     }
-
-
-
-
-
-
 });

@@ -39,7 +39,7 @@
     <!--配置应用名称-->
     <dubbo:application name="pinyougou-web-manager"/>
     <!--配置注册中心的地址-->
-    <dubbo:registry address="zookeeper://192.168.200.128:2181"/>
+    <dubbo:registry address="zookeeper://192.168.200.129:2181"/>
     <!--扫描对外暴露的接口地址-->
     <dubbo:annotation package="cn.itcast.core.controller"/>
     <!--服务消费方默认校验提供方是否存在-->

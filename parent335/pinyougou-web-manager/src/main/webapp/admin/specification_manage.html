@@ -27,7 +27,7 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="specificationController" ng-init="searchEntity={auditStatus:'0'}">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="specificationController" ng-init="searchEntity={status:'0'}">
   <!-- .box-body -->                
                     <div class="box-header with-border">
                         <h3 class="box-title">规格审核</h3>
@@ -76,7 +76,7 @@
 									      <td>{{entity.specName}}</td>
 										  <td>
 		                                  	<span>
-		                                  		{{status[entity.auditStatus]}}
+		                                  		{{status[entity.status]}}
 		                                  	</span>
 										  </td>
 		                                  <td class="text-center">                                           
